@@ -8,6 +8,7 @@ import ProposalFormPage from './pages/ProposalFormPage';
 import PostTrainingPage from './pages/PostTrainingPage';
 import PostTrainingUploadPage from './pages/PostTrainingUploadPage';
 import SertifikatPage from './pages/SertifikatPage';
+import EvaluationPage from './pages/EvaluationPage';
 import UserManagementPage from './pages/UserManagementPage';
 import RoleDashboardPage from './pages/RoleDashboardPage';
 import UnauthorizedPage from './pages/UnauthorizedPage';
@@ -103,6 +104,7 @@ function App() {
               <Route path="/post-training" element={<ProtectedRoute allowedRoles={['admin', 'bagian_diklat', 'peserta', 'unit_kerja']}><PostTrainingPage /></ProtectedRoute>} />
               <Route path="/post-training/upload" element={<ProtectedRoute allowedRoles={['admin', 'bagian_diklat', 'peserta', 'unit_kerja']}><PostTrainingUploadPage /></ProtectedRoute>} />
               <Route path="/sertifikat" element={<ProtectedRoute allowedRoles={['admin', 'bagian_diklat', 'peserta', 'unit_kerja']}><SertifikatPage /></ProtectedRoute>} />
+              <Route path="/evaluasi" element={<ProtectedRoute allowedRoles={['admin', 'bagian_diklat', 'direktur']}><EvaluationPage /></ProtectedRoute>} />
               <Route path="/users" element={<ProtectedRoute allowedRoles={['admin']}><UserManagementPage /></ProtectedRoute>} />
               <Route path="/unauthorized" element={<UnauthorizedPage />} />
             </Routes>

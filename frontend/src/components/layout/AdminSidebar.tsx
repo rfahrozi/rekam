@@ -7,6 +7,7 @@ const links = [
   { to: '/proposal', label: 'Pengajuan', roles: ['admin', 'bagian_diklat', 'unit_kerja', 'direktur'] },
   { to: '/post-training', label: 'Pasca Diklat', roles: ['admin', 'bagian_diklat', 'peserta', 'unit_kerja'] },
   { to: '/post-training/upload', label: 'Unggah Dokumen', roles: ['admin', 'bagian_diklat', 'peserta', 'unit_kerja'] },
+  { to: '/evaluasi', label: 'Evaluasi & Presentasi', roles: ['admin', 'bagian_diklat'] },
   { to: '/sertifikat', label: 'Sertifikat Kompetensi', roles: ['admin', 'bagian_diklat', 'peserta', 'unit_kerja'] },
   { to: '/users', label: 'Kelola Pengguna', roles: ['admin'] },
 ];
