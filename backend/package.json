@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "npx prisma@6.19.3 generate && tsx watch src/index.ts",
     "build": "npx prisma@6.19.3 generate && tsc -p tsconfig.json",
-    "start": "node dist/index.js",
+    "start": "npx prisma@6.19.3 generate && node dist/index.js",
     "test": "jest --runInBand",
     "seed": "tsx prisma/seed.ts",
     "postinstall": "npx prisma@6.19.3 generate"
