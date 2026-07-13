@@ -1,8 +1,5 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import LoginModal from '../components/auth/LoginModal';
 
 const highlights = [
   {
@@ -25,8 +22,7 @@ const metrics = [
   { label: 'Dokumen Terkumpul', value: '18' },
 ];
 
-export default function LandingPage() {
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+export default function LandingPage({ onOpenLogin }: { onOpenLogin?: () => void }) {
 
   return (
     <div className="space-y-12 relative pb-20">
@@ -50,7 +46,7 @@ export default function LandingPage() {
             </div>
             <div className="flex flex-wrap gap-4 pt-4">
               <Button
-                onClick={() => setIsLoginModalOpen(true)}
+                onClick={onOpenLogin}
                 className="bg-white text-black hover:bg-zinc-200 font-semibold px-8 py-6 rounded-full shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all hover:scale-105"
               >
                 Mulai Gunakan
@@ -129,7 +125,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Modal Split-Screen dipanggil dari Navbar atau CTA Button */}
     </div>
   );
 }

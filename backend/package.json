@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "npx prisma@6.19.3 generate && tsx watch src/index.ts",
-    "build": "tsc -p tsconfig.json",
+    "build": "npx prisma@6.19.3 generate && tsc -p tsconfig.json",
+    "start": "node dist/index.js",
     "test": "jest --runInBand",
     "seed": "tsx prisma/seed.ts"
   },

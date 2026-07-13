@@ -5,7 +5,10 @@ import authRoutes from './routes/auth.routes';
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://frontend-xi-mauve-79.vercel.app', 'https://frontend-4napld5k3-fahrozis-projects.vercel.app'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Routes Moduler

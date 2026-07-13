@@ -95,7 +95,7 @@ function App() {
           {!isLandingPage && <AdminSidebar />}
           <div className="flex-1 w-full">
             <Routes>
-              <Route path="/" element={<LandingPage />} />
+              <Route path="/" element={<LandingPage onOpenLogin={() => setIsLoginModalOpen(true)} />} />
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/role-dashboard" element={<ProtectedRoute allowedRoles={['admin', 'bagian_diklat', 'unit_kerja', 'direktur', 'peserta']}><RoleDashboardPage /></ProtectedRoute>} />
               <Route path="/proposal" element={<ProtectedRoute allowedRoles={['admin', 'bagian_diklat', 'unit_kerja', 'direktur']}><ProposalPage /></ProtectedRoute>} />
