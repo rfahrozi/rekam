@@ -32,6 +32,11 @@ RUN npm install --production
 # Salin file hasil build dari Stage 1
 COPY --from=builder /app/dist ./dist
 
+# Salin Prisma schema dan generated client dari Stage 1
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma/client ./node_modules/@prisma/client
+
 # Ekspos port 5000
 EXPOSE 5000
 
