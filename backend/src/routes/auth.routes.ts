@@ -1,8 +1,7 @@
-import { Router } from 'express';
+const express = require('express');
 import { register, login, getMe } from '../controllers/auth.controller';
 import { verifyToken } from '../middlewares/auth.middleware';
-
-const router = Router();
+const router = express.Router();
 
 router.post('/register', register);
 router.post('/login', login);

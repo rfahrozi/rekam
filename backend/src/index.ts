@@ -1,4 +1,4 @@
-import express from 'express';
+const express = require('express');
 import cors from 'cors';
 import authRoutes from './routes/auth.routes';
 
@@ -14,12 +14,12 @@ app.use(express.json());
 // Routes Moduler
 app.use('/api/auth', authRoutes);
 
-app.get('/api/health', (_req, res) => {
+app.get('/api/health', (_req: any, res: any) => {
   res.json({ status: 'ok', service: 'diklat-backend' });
 });
 
 // Mock Proposals Route (Akan diganti dengan DB nanti)
-app.get('/api/proposals', (_req, res) => {
+app.get('/api/proposals', (_req: any, res: any) => {
   res.json([
     {
       id: 1,
@@ -40,7 +40,7 @@ app.get('/api/proposals', (_req, res) => {
   ]);
 });
 
-app.post('/api/proposals', (req, res) => {
+app.post('/api/proposals', (req: any, res: any) => {
   const newProposal = {
     id: Date.now(),
     ...req.body,
