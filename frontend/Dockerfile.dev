@@ -1,0 +1,19 @@
+# Base image
+FROM node:20-alpine
+
+# Set direktori kerja di dalam container
+WORKDIR /app
+
+# Salin file package.json dan package-lock.json
+COPY package*.json ./
+
+# Install seluruh dependencies
+RUN npm install
+
+# Copy source code ke container (catatan: pada saat docker-compose dev, ini akan dioverride oleh bind mount,
+# tapi tetap diperlukan untuk base image build fallback)
+COPY . .
+
+# Eksekusi Vite.
+# --host 0.0.0.0 agar bisa diakses keluar container oleh browser host lokal
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

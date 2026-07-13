@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: diklat_backend_prod
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: diklat_frontend_prod
+    restart: always
+    ports:
+      # Port 80 diarahkan ke web port Nginx (frontend server)
+      - "80:80"
+    depends_on:
+      - backend

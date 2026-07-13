@@ -1,0 +1,24 @@
+# Base image
+FROM node:20-alpine
+
+# Install OpenSSL untuk kebutuhan Prisma di Alpine
+RUN apk add --no-cache openssl
+
+# Set direktori kerja
+WORKDIR /app
+
+# Salin dependencies list
+COPY package*.json ./
+
+# Install seluruh paket npm (termasuk devDependencies)
+RUN npm install
+
+# Salin seluruh file
+# (Ini dioverride oleh bind mount di docker-compose.yml, tapi tetap jadi fallback base)
+COPY . .
+
+# Ekspos port yang digunakan aplikasi
+EXPOSE 5000
+
+# Eksekusi command start development backend (mis. tsx watch src/index.ts)
+CMD ["npm", "run", "dev"]

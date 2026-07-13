@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spesifikasi MVP Aplikasi REKAM</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #dbe3ee;
+      --accent: #1d4ed8;
+      --accent-soft: #dbeafe;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .page {
+      max-width: 1000px;
+      margin: 32px auto;
+      padding: 0 20px 40px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    }
+    h1, h2, h3 { margin-top: 0; }
+    h1 { font-size: 32px; line-height: 1.2; }
+    h2 { font-size: 24px; margin-top: 32px; padding-bottom: 8px; border-bottom: 2px solid var(--line); }
+    h3 { font-size: 18px; margin-top: 22px; }
+    p, li { font-size: 15px; }
+    .subtitle { color: var(--muted); margin-top: 8px; }
+    .badge { display: inline-block; background: var(--accent-soft); color: var(--accent); padding: 6px 12px; border-radius: 999px; font-weight: 700; font-size: 12px; letter-spacing: 0.04em; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0 24px; }
+    th, td { border: 1px solid var(--line); padding: 12px; text-align: left; vertical-align: top; font-size: 14px; }
+    th { background: #eff6ff; }
+    ul { margin-top: 8px; }
+    .note { padding: 14px 16px; border-left: 4px solid var(--accent); background: #f8fbff; color: #334155; }
+    .section-lead { color: var(--muted); margin-top: -6px; margin-bottom: 18px; }
+    .visual-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fcfdff;
+      padding: 18px;
+      margin: 18px 0 28px;
+      overflow: hidden;
+    }
+    .svg-wrap {
+      width: 100%;
+      overflow-x: auto;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 10px;
+    }
+    .caption { font-size: 13px; color: var(--muted); margin: 10px 0 0; }
+    .dashboard {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #fff;
+      overflow: hidden;
+    }
+    .topbar {
+      background: #0f172a;
+      color: #fff;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand { font-weight: 700; letter-spacing: 0.02em; }
+    .topmeta { font-size: 13px; color: #cbd5e1; }
+    .dash-body {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 620px;
+    }
+    .sidebar {
+      border-right: 1px solid var(--line);
+      background: #f8fafc;
+      padding: 18px;
+    }
+    .sidebar h4 { margin: 0 0 12px; font-size: 14px; color: #334155; text-transform: uppercase; letter-spacing: 0.04em; }
+    .nav-item {
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #334155;
+      border: 1px solid transparent;
+    }
+    .nav-item.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-color: #bfdbfe;
+      font-weight: 700;
+    }
+    .content {
+      padding: 20px;
+      background: #ffffff;
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .kpi {
+      background: #f8fbff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .kpi .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.03em; }
+    .kpi .value { font-size: 26px; font-weight: 700; margin-top: 6px; }
+    .panel-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 16px;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      background: #fff;
+    }
+    .panel h4 { margin: 0 0 12px; font-size: 16px; }
+    .bar-list { display: grid; gap: 10px; }
+    .bar-row { display: grid; grid-template-columns: 150px 1fr 50px; gap: 10px; align-items: center; font-size: 13px; }
+    .bar-track { height: 10px; background: #e5eefb; border-radius: 999px; overflow: hidden; }
+    .bar-fill { height: 100%; background: linear-gradient(90deg, #2563eb, #60a5fa); border-radius: 999px; }
+    .mini-table { width: 100%; border-collapse: collapse; }
+    .mini-table th, .mini-table td { border-bottom: 1px solid var(--line); padding: 10px 8px; font-size: 13px; text-align: left; }
+    .status {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .status.ok { background: #dcfce7; color: #166534; }
+    .status.warn { background: #fef3c7; color: #92400e; }
+    .status.late { background: #fee2e2; color: #991b1b; }
+    .wireframe-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .wf-screen {
+      border: 2px dashed #94a3b8;
+      border-radius: 16px;
+      background: #fff;
+      padding: 14px;
+    }
+    .wf-header {
+      height: 36px;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      background: #f8fafc;
+    }
+    .wf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    .wf-box {
+      min-height: 56px;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      background: #f8fafc;
+      padding: 8px;
+      font-size: 12px;
+      color: #475569;
+    }
+    .wf-box.tall { min-height: 140px; }
+    .wf-box.form { min-height: 220px; }
+    .wf-label { font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 6px; }
+    @media (max-width: 900px) {
+      .dash-body, .panel-grid, .wireframe-grid { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .sidebar { border-right: none; border-bottom: 1px solid var(--line); }
+    }
+    @media (max-width: 640px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+      .bar-row { grid-template-columns: 1fr; }
+      .page { padding: 0 12px 28px; }
+      .card { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="card">
+      <div class="badge">DOKUMEN FORMAL MVP</div>
+      <h1>Spesifikasi Minimum Viable Product (MVP)<br />Aplikasi REKAM</h1>
+      <p class="subtitle">Rumah Sakit Jiwa milik pemerintah — disusun berdasarkan rancangan MVP terlampir dengan fokus pada kepatuhan SLA, percepatan persetujuan, dan digitalisasi arsip kompetensi.</p>
+
+      <h2>1. Pendahuluan</h2>
+      <h3>1.1 Tujuan MVP</h3>
+      <p>MVP ini dirancang untuk menghadirkan sistem minimum yang langsung dapat digunakan untuk mengendalikan proses diklat ASN di lingkungan Rumah Sakit Jiwa milik pemerintah. Fokus utamanya adalah memastikan kepatuhan terhadap batas waktu operasional, mempercepat proses persetujuan, dan mendigitalisasi arsip bukti kompetensi serta dokumen pelaksanaan diklat.</p>
+      <p>Secara operasional, MVP ini diarahkan untuk menegakkan tiga kontrol waktu utama yang tercermin pada dokumen acuan, yaitu pengajuan realisasi diklat sebelum H-25, unggah laporan pasca-diklat paling lambat H+3, dan pelaksanaan presentasi atau sosialisasi hasil diklat paling lambat H+6. Dengan demikian, sistem ini berfungsi bukan sebagai produk lengkap, tetapi sebagai alat validasi proses inti yang paling bernilai dan paling dapat diuji.</p>
+
+      <h3>1.2 Target Audiens</h3>
+      <p>Target pengguna pada fase MVP adalah aktor internal yang terlibat langsung dalam siklus diklat, yaitu Direktur sebagai pemberi persetujuan, Kepala Unit atau Admin Unit Kerja sebagai pengusul, Bagian Diklat sebagai pengelola proses inti, dan Pegawai atau Peserta Diklat sebagai pihak yang wajib memenuhi kewajiban pasca-diklat. Pemilihan audiens ini sengaja dibatasi agar implementasi awal tetap fokus pada alur yang paling penting.</p>
+
+      <h3>1.3 Masalah Utama yang Diselesaikan</h3>
+      <p>Masalah utama yang ingin diselesaikan oleh MVP ini adalah keterlambatan pengajuan, lambatnya proses persetujuan, tidak terpusatnya dokumen pasca-diklat, sulitnya memantau kepatuhan terhadap SOP/SLA, dan belum tertutupnya siklus evaluasi serta tindak lanjut secara terdokumentasi. Dengan adanya sistem terpusat, setiap tahapan dapat dipantau statusnya, setiap dokumen dapat dilacak, dan setiap aktor memiliki peran yang lebih jelas di dalam proses.</p>
+
+      <div class="note"><strong>Fokus nilai MVP:</strong> menyampaikan nilai minimum yang dapat langsung dipakai, diuji, dan diukur, bukan membangun sistem diklat yang lengkap sejak awal.</div>
+      <h2>2. Ruang Lingkup MVP</h2>
+      <h3>2.1 Fitur yang Disertakan dalam MVP</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Fitur</th>
+            <th>Deskripsi Fungsionalitas</th>
+            <th>Alasan Masuk MVP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Pengajuan Diklat Cerdas</strong></td>
+            <td>Unit kerja mengisi formulir pengajuan realisasi diklat secara digital. Sistem memeriksa kepatuhan terhadap batas waktu H-25 dan memberi status yang jelas pada setiap pengajuan.</td>
+            <td>Menjadi fondasi seluruh alur dan alat utama untuk memvalidasi kepatuhan SLA awal.</td>
+          </tr>
+          <tr>
+            <td><strong>Verifikasi Pengajuan</strong></td>
+            <td>Bagian Diklat memeriksa kelengkapan usulan, kesesuaian dengan rencana diklat, dan kesiapan dokumen sebelum diteruskan ke pimpinan.</td>
+            <td>Menjaga kualitas proses agar hanya usulan yang sah dan lengkap yang dapat diproses.</td>
+          </tr>
+          <tr>
+            <td><strong>Persetujuan Direktur Terpusat</strong></td>
+            <td>Direktur melihat seluruh usulan pada satu dasbor dan memberikan keputusan persetujuan secara terpusat.</td>
+            <td>Mengurangi bottleneck birokrasi pada titik keputusan utama.</td>
+          </tr>
+          <tr>
+            <td><strong>Portal Laporan Pasca-Diklat</strong></td>
+            <td>Peserta mengunggah laporan kegiatan, laporan dana, bukti transaksi, dan sertifikat melalui satu portal dengan kontrol waktu H+3.</td>
+            <td>Memvalidasi disiplin pelaporan dan pengumpulan dokumen pasca-diklat.</td>
+          </tr>
+          <tr>
+            <td><strong>Arsip Digital Dokumen Kompetensi</strong></td>
+            <td>Sistem menyimpan sertifikat dan dokumen diklat secara terstruktur agar mudah ditelusuri.</td>
+            <td>Mendukung tujuan bisnis digitalisasi arsip bukti kompetensi.</td>
+          </tr>
+          <tr>
+            <td><strong>Penjadwalan Presentasi / Sosialisasi</strong></td>
+            <td>Bagian Diklat menetapkan jadwal presentasi hasil diklat dan memantau pelaksanaannya maksimal H+6.</td>
+            <td>Menjamin transfer hasil belajar ke organisasi.</td>
+          </tr>
+          <tr>
+            <td><strong>Dokumen Evaluasi dan Berita Acara</strong></td>
+            <td>Sistem menyimpan jadwal presentasi, berita acara, dan dokumen pendukung evaluasi.</td>
+            <td>Memberikan bukti formal bahwa tindak lanjut pasca-diklat telah dilakukan.</td>
+          </tr>
+          <tr>
+            <td><strong>Laporan Evaluasi Akhir</strong></td>
+            <td>Bagian Diklat menyusun kesimpulan kesesuaian pelaksanaan diklat berdasarkan dokumen dan tahapan yang telah dijalankan.</td>
+            <td>Menutup siklus evaluasi operasional pada fase MVP.</td>
+          </tr>
+          <tr>
+            <td><strong>Analisis Tindak Lanjut</strong></td>
+            <td>Sistem mendukung pencatatan rekomendasi tindak lanjut atau rencana aksi lanjutan oleh unit kerja.</td>
+            <td>Memastikan proses tidak berhenti pada administrasi semata.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>2.2 Deskripsi Fungsional Detail</h3>
+      <p><strong>Pengajuan Diklat Cerdas</strong> menjadi pintu masuk utama seluruh proses. Pengguna dari unit kerja mengajukan realisasi diklat melalui formulir digital yang baku, sehingga data pengajuan tidak lagi tersebar. Sistem harus mampu menampilkan tanggal pengajuan, status, dan kepatuhan terhadap tenggat yang ditetapkan.</p>
+      <p><strong>Verifikasi Pengajuan</strong> memungkinkan Bagian Diklat bertindak sebagai gerbang kendali mutu proses. Pada tahap ini, kelengkapan data dan kesesuaian dengan rencana diklat diperiksa sebelum berlanjut ke persetujuan pimpinan.</p>
+      <p><strong>Persetujuan Direktur Terpusat</strong> menyederhanakan pengambilan keputusan melalui satu titik kendali. Nilai utamanya adalah mempercepat proses persetujuan dan mengurangi ketergantungan pada koordinasi manual yang tersebar.</p>
+      <p><strong>Portal Laporan Pasca-Diklat</strong> memastikan peserta memenuhi kewajiban administratif sesudah pelatihan. Portal ini mengonsolidasikan seluruh dokumen yang wajib diunggah dan memberi dasar untuk evaluasi berikutnya.</p>
+      <p><strong>Arsip Digital</strong> berfungsi sebagai repositori minimum untuk dokumen kompetensi. Pada fase MVP, fokusnya adalah keterlacakan dan kelengkapan, bukan pengelolaan arsip yang kompleks.</p>
+      <p><strong>Penjadwalan Presentasi / Sosialisasi</strong> memastikan hasil diklat disebarluaskan kembali kepada organisasi melalui jadwal yang dapat dipantau. Fitur ini penting agar manfaat pelatihan tidak berhenti pada peserta individual.</p>
+      <p><strong>Dokumen Evaluasi dan Berita Acara</strong> menyediakan bukti formal atas pelaksanaan sosialisasi dan tindak lanjut. Dokumen ini juga menjadi dasar pemeriksaan kepatuhan proses.</p>
+      <p><strong>Laporan Evaluasi Akhir</strong> dan <strong>Analisis Tindak Lanjut</strong> menutup siklus kendali manajerial dengan menghasilkan kesimpulan serta rekomendasi aksi berikutnya.</p>
+
+      <h3>2.3 Fitur yang Dikecualikan dari MVP</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Fitur yang Dikecualikan</th>
+            <th>Alasan Penundaan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Integrasi penuh dengan sistem kepegawaian, keuangan, persuratan, atau e-office lain</td>
+            <td>Tidak diperlukan untuk memvalidasi proses inti pada fase awal.</td>
+          </tr>
+          <tr>
+            <td>Otomasi menyeluruh pencairan anggaran dan proses keuangan</td>
+            <td>Di luar fokus validasi awal; cukup dicatat sebagai kebutuhan dokumen.</td>
+          </tr>
+          <tr>
+            <td>Manajemen panitia dan SK internal yang kompleks</td>
+            <td>Bukan pembeda utama untuk nilai awal MVP.</td>
+          </tr>
+          <tr>
+            <td>Dashboard analitik lanjutan multi-periode</td>
+            <td>Dapat dikembangkan setelah data dasar terkumpul.</td>
+          </tr>
+          <tr>
+            <td>Aplikasi mobile native</td>
+            <td>Belum esensial untuk pembuktian proses inti.</td>
+          </tr>
+          <tr>
+            <td>Modul kompetensi pegawai yang sangat lengkap dan longitudinal</td>
+            <td>Terlalu luas untuk fase MVP.</td>
+          </tr>
+          <tr>
+            <td>Workflow regulasi ASN di luar proses yang tercantum pada dokumen acuan</td>
+            <td>Di luar ruang lingkup yang tersedia pada lampiran.</td>
+          </tr>
+        </tbody>
+      </table>
+      <h2>3. Kebutuhan Nonfungsional</h2>
+      <p>Sebagai MVP, sistem harus sederhana, stabil, dan mudah digunakan oleh pengguna internal yang tingkat literasi digitalnya beragam. Antarmuka harus jelas, jumlah langkah pada proses utama harus sesingkat mungkin, dan status setiap pengajuan harus dapat dipahami tanpa memerlukan interpretasi teknis yang rumit.</p>
+      <p>Sistem juga harus mendukung keterlacakan dokumen dan aktivitas. Setiap pengajuan, verifikasi, persetujuan, unggahan laporan, penjadwalan presentasi, dan evaluasi sebaiknya memiliki jejak waktu serta identitas pelaku agar mudah diaudit secara internal.</p>
+      <p>Dari sisi keamanan, akses data perlu dibatasi berdasarkan peran. Dokumen kompetensi dan dokumen administrasi diklat tidak boleh dapat dilihat atau diubah oleh pengguna yang tidak berwenang. Kebutuhan ini penting karena sistem akan menyimpan dokumen resmi dan bukti kegiatan pegawai.</p>
+
+      <h2>4. Rancangan Peran Pengguna dan Alur Kerja</h2>
+      <h3>4.1 Peran Pengguna</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Peran</th>
+            <th>Tanggung Jawab Utama</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Direktur</td>
+            <td>Meninjau dan memberikan keputusan persetujuan atas pengajuan diklat yang telah diverifikasi.</td>
+          </tr>
+          <tr>
+            <td>Kepala Unit / Admin Unit Kerja</td>
+            <td>Mengajukan realisasi diklat, melengkapi data usulan, dan memantau status pengajuan.</td>
+          </tr>
+          <tr>
+            <td>Bagian Diklat</td>
+            <td>Melakukan verifikasi, mengelola alur, memantau SLA, menjadwalkan presentasi, menyusun evaluasi, dan mengelola arsip digital.</td>
+          </tr>
+          <tr>
+            <td>Pegawai / Peserta Diklat</td>
+            <td>Mengunggah laporan pasca-diklat, sertifikat, dan dokumen pendukung sesuai tenggat.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>4.2 Alur Kerja Inti</h3>
+      <p>Alur utama dimulai dari pengajuan realisasi diklat oleh unit kerja. Setelah data masuk, Bagian Diklat memverifikasi kelengkapan dan kesesuaian usulan. Usulan yang lolos verifikasi diteruskan ke Direktur untuk persetujuan. Setelah kegiatan selesai, peserta wajib mengunggah dokumen pasca-diklat melalui portal yang sama. Bagian Diklat kemudian menjadwalkan presentasi hasil, menyimpan berita acara dan dokumen evaluasi, lalu menutup proses melalui laporan evaluasi akhir dan analisis tindak lanjut.</p>
+
+      <h2>5. Kebutuhan Data dan Dokumen</h2>
+      <p>Berdasarkan dokumen acuan, sistem minimal harus dapat menampung data pengajuan diklat, identitas peserta, unit kerja, jadwal kegiatan, status verifikasi, status persetujuan, tanggal-tanggal penting SLA, serta metadata dokumen yang diunggah. Selain data inti, sistem juga harus mendukung penyimpanan form dan dokumen pelengkap yang terkait dengan perencanaan, pelaksanaan, pembiayaan, evaluasi, dan tindak lanjut.</p>
+      <p>Dokumen yang relevan dalam fase MVP dapat mencakup formulir pengajuan, nota dinas, sertifikat, laporan kegiatan, laporan dana, bukti transaksi, berita acara presentasi, serta laporan evaluasi. Pada fase awal ini, fokusnya adalah memastikan dokumen tersedia, terindeks, dan mudah ditemukan kembali.</p>
+
+      <h2>6. Batasan Teknis MVP</h2>
+      <p>MVP ini sebaiknya dibangun sebagai aplikasi web internal yang dapat diakses melalui browser tanpa ketergantungan pada instalasi perangkat lunak tambahan. Pendekatan ini paling sesuai untuk implementasi awal karena memudahkan distribusi, pelatihan, dan pemeliharaan. Integrasi ke sistem lain belum menjadi prioritas dan dapat ditunda sampai manfaat operasional dasar telah tervalidasi.</p>
+      <p>Secara teknis, penyederhanaan arsitektur perlu dijaga. Pengelolaan notifikasi, audit trail, repositori dokumen, dan kontrol akses berbasis peran sebaiknya dipandang sebagai kebutuhan inti. Sebaliknya, fitur-fitur seperti analitik lanjutan, orkestrasi multi-sistem, atau otomasi keuangan penuh harus ditahan agar tidak mengganggu fokus MVP.</p>
+
+      <h2>7. Indikator Keberhasilan MVP</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Indikator</th>
+            <th>Ukuran Keberhasilan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Kepatuhan pengajuan H-25</td>
+            <td>Mayoritas pengajuan yang diproses masuk melalui sistem sebelum tenggat yang ditentukan.</td>
+          </tr>
+          <tr>
+            <td>Kepatuhan unggah H+3</td>
+            <td>Dokumen pasca-diklat diunggah tepat waktu dan terekam secara konsisten.</td>
+          </tr>
+          <tr>
+            <td>Kepatuhan presentasi H+6</td>
+            <td>Jadwal dan bukti pelaksanaan sosialisasi tercatat pada sistem.</td>
+          </tr>
+          <tr>
+            <td>Kecepatan persetujuan</td>
+            <td>Waktu dari verifikasi ke keputusan Direktur berkurang dibanding proses manual sebelumnya.</td>
+          </tr>
+          <tr>
+            <td>Kelengkapan arsip digital</td>
+            <td>Dokumen kompetensi dan dokumen pelaksanaan diklat dapat ditemukan kembali secara terpusat.</td>
+          </tr>
+          <tr>
+            <td>Kejelasan status proses</td>
+            <td>Pengguna dapat mengetahui posisi setiap pengajuan tanpa perlu menanyakan secara manual.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>8. Rencana Implementasi Bertahap</h2>
+      <p>Tahap pertama difokuskan pada digitalisasi pengajuan, verifikasi, dan persetujuan. Tahap kedua menambahkan portal pasca-diklat, arsip digital, serta kontrol tenggat H+3. Tahap ketiga melengkapi penjadwalan presentasi, berita acara, evaluasi akhir, dan analisis tindak lanjut. Dengan pendekatan bertahap ini, organisasi dapat menguji adopsi pengguna sekaligus meminimalkan risiko perubahan proses yang terlalu besar dalam satu waktu.</p>
+
+      <h2>9. Risiko dan Mitigasi Awal</h2>
+      <p>Risiko utama pada fase MVP adalah resistensi pengguna terhadap perubahan proses, data awal yang tidak lengkap, serta kebiasaan tetap menjalankan alur manual di luar sistem. Mitigasi awal yang paling realistis adalah menetapkan penggunaan sistem pada alur tertentu sebagai kanal resmi, menyediakan pelatihan singkat untuk aktor utama, dan memastikan dukungan administratif dari Bagian Diklat serta pimpinan.</p>
+      <p>Risiko lain adalah meluasnya ruang lingkup sebelum manfaat inti tervalidasi. Karena itu, setiap permintaan tambahan fitur harus dievaluasi terhadap tiga tujuan utama MVP, yaitu kepatuhan SLA, percepatan persetujuan, dan digitalisasi arsip kompetensi.</p>
+
+      <h2>10. Diagram Alur MVP</h2>
+      <p class="section-lead">Visualisasi alur inti MVP dari pengajuan hingga evaluasi dan tindak lanjut. Diagram ini menekankan kontrol SLA H-25, H+3, dan H+6.</p>
+      <div class="visual-card">
+        <div class="svg-wrap">
+          <svg viewBox="0 0 1180 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram alur MVP Aplikasi REKAM">
+            <defs>
+              <linearGradient id="nodeBlue" x1="0" x2="1">
+                <stop offset="0%" stop-color="#dbeafe"/>
+                <stop offset="100%" stop-color="#eff6ff"/>
+              </linearGradient>
+              <linearGradient id="nodeGreen" x1="0" x2="1">
+                <stop offset="0%" stop-color="#dcfce7"/>
+                <stop offset="100%" stop-color="#f0fdf4"/>
+              </linearGradient>
+              <linearGradient id="nodeAmber" x1="0" x2="1">
+                <stop offset="0%" stop-color="#fef3c7"/>
+                <stop offset="100%" stop-color="#fffbeb"/>
+              </linearGradient>
+              <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+              </marker>
+            </defs>
+            <rect x="30" y="30" width="190" height="74" rx="16" fill="url(#nodeBlue)" stroke="#60a5fa"/>
+            <text x="125" y="57" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">Mulai</text>
+            <text x="125" y="80" text-anchor="middle" font-size="13" fill="#334155">Unit kerja identifikasi kebutuhan kompetensi</text>
+
+            <rect x="270" y="30" width="220" height="74" rx="16" fill="url(#nodeBlue)" stroke="#60a5fa"/>
+            <text x="380" y="57" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">Pengajuan Kompetensi</text>
+            <text x="380" y="80" text-anchor="middle" font-size="13" fill="#334155">Form digital + validasi SLA H-25</text>
+
+            <polygon points="590,24 700,67 590,110 480,67" fill="url(#nodeAmber)" stroke="#f59e0b"/>
+            <text x="590" y="62" text-anchor="middle" font-size="15" font-weight="700" fill="#92400e">Tepat waktu?</text>
+            <text x="590" y="82" text-anchor="middle" font-size="12" fill="#92400e">Sebelum H-25</text>
+
+            <rect x="760" y="30" width="220" height="74" rx="16" fill="url(#nodeBlue)" stroke="#60a5fa"/>
+            <text x="870" y="57" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">Verifikasi Kompetensi</text>
+            <text x="870" y="80" text-anchor="middle" font-size="13" fill="#334155">Cek kelengkapan dan kesesuaian</text>
+
+            <rect x="30" y="170" width="200" height="74" rx="16" fill="#fee2e2" stroke="#f87171"/>
+            <text x="130" y="197" text-anchor="middle" font-size="16" font-weight="700" fill="#991b1b">Tolak / Kembalikan</text>
+            <text x="130" y="220" text-anchor="middle" font-size="13" fill="#7f1d1d">Pengajuan terlambat atau revisi</text>
+
+            <polygon points="870,164 980,207 870,250 760,207" fill="url(#nodeAmber)" stroke="#f59e0b"/>
+            <text x="870" y="202" text-anchor="middle" font-size="15" font-weight="700" fill="#92400e">Lengkap?</text>
+            <text x="870" y="222" text-anchor="middle" font-size="12" fill="#92400e">Sesuai rencana pengembangan kompetensi</text>
+
+            <rect x="760" y="310" width="220" height="74" rx="16" fill="url(#nodeBlue)" stroke="#60a5fa"/>
+            <text x="870" y="337" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">Persetujuan Direktur</text>
+            <text x="870" y="360" text-anchor="middle" font-size="13" fill="#334155">Dashbord keputusan terpusat</text>
+
+            <polygon points="590,304 700,347 590,390 480,347" fill="url(#nodeAmber)" stroke="#f59e0b"/>
+            <text x="590" y="342" text-anchor="middle" font-size="15" font-weight="700" fill="#92400e">Disetujui?</text>
+            <text x="590" y="362" text-anchor="middle" font-size="12" fill="#92400e">Ya / Tidak</text>
+
+            <rect x="270" y="310" width="220" height="74" rx="16" fill="#fee2e2" stroke="#f87171"/>
+            <text x="380" y="337" text-anchor="middle" font-size="16" font-weight="700" fill="#991b1b">Revisi / Batal</text>
+            <text x="380" y="360" text-anchor="middle" font-size="13" fill="#7f1d1d">Kembali ke unit kerja</text>
+
+            <rect x="30" y="310" width="190" height="74" rx="16" fill="url(#nodeGreen)" stroke="#4ade80"/>
+            <text x="125" y="337" text-anchor="middle" font-size="16" font-weight="700" fill="#166534">Pelaksanaan Kompetensi</text>
+            <text x="125" y="360" text-anchor="middle" font-size="13" fill="#334155">Peserta mengikuti kegiatan</text>
+
+            <rect x="30" y="456" width="200" height="74" rx="16" fill="url(#nodeGreen)" stroke="#4ade80"/>
+            <text x="130" y="483" text-anchor="middle" font-size="16" font-weight="700" fill="#166534">Portal H+3</text>
+            <text x="130" y="506" text-anchor="middle" font-size="13" fill="#334155">Upload laporan, dana, sertifikat</text>
+
+            <rect x="290" y="456" width="220" height="74" rx="16" fill="url(#nodeGreen)" stroke="#4ade80"/>
+            <text x="400" y="483" text-anchor="middle" font-size="16" font-weight="700" fill="#166534">Jadwal H+6</text>
+            <text x="400" y="506" text-anchor="middle" font-size="13" fill="#334155">Presentasi / sosialisasi hasil</text>
+
+            <rect x="570" y="456" width="220" height="74" rx="16" fill="url(#nodeGreen)" stroke="#4ade80"/>
+            <text x="680" y="483" text-anchor="middle" font-size="16" font-weight="700" fill="#166534">Evaluasi Akhir</text>
+            <text x="680" y="506" text-anchor="middle" font-size="13" fill="#334155">Berita acara dan laporan evaluasi</text>
+
+            <rect x="850" y="456" width="240" height="74" rx="16" fill="url(#nodeGreen)" stroke="#4ade80"/>
+            <text x="970" y="483" text-anchor="middle" font-size="16" font-weight="700" fill="#166534">Analisis Tindak Lanjut</text>
+            <text x="970" y="506" text-anchor="middle" font-size="13" fill="#334155">Rekomendasi lanjutan atau aksi unit</text>
+
+            <line x1="220" y1="67" x2="270" y2="67" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+            <line x1="490" y1="67" x2="520" y2="67" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+            <line x1="700" y1="67" x2="760" y2="67" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+            <line x1="590" y1="110" x2="590" y2="140" stroke="#64748b" stroke-width="3"/>
+            <line x1="590" y1="140" x2="130" y2="140" stroke="#64748b" stroke-width="3"/>
+            <line x1="130" y1="140" x2="130" y2="170" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+            <text x="352" y="132" font-size="12" fill="#991b1b">Tidak</text>
+            <text x="722" y="58" font-size="12" fill="#166534">Ya</text>
+
+            <line x1="870" y1="104" x2="870" y2="164" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+            <line x1="760" y1="207" x2="230" y2="207" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+            <text x="500" y="198" font-size="12" fill="#991b1b">Tidak, perbaiki dokumen</text>
+            <line x1="870" y1="250" x2="870" y2="310" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+            <text x="884" y="286" font-size="12" fill="#166534">Ya</text>
+
+            <line x1="760" y1="347" x2="700" y2="347" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+            <line x1="480" y1="347" x2="490" y2="347" stroke="#64748b" stroke-width="3"/>
+            <line x1="480" y1="347" x2="490" y2="347" stroke="#64748b" stroke-width="3"/>
+            <line x1="480" y1="347" x2="490" y2="347" stroke="#64748b" stroke-width="3"/>
+            <line x1="480" y1="347" x2="490" y2="347" stroke="#64748b" stroke-width="3"/>
+            <line x1="480" y1="347" x2="490" y2="347" stroke="#64748b" stroke-width="3"/>
+            <line x1="480" y1="347" x2="490" y2="347" stroke="#64748b" stroke-width="3"/>
+            <line x1="480" y1="347" x2="490" y2="347" stroke="#64748b" stroke-width="3"/>
+            <line x1="480" y1="347" x2="490" y2="347" stroke="#64748b" stroke-width="3"/>
+            <line x1="480" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+            <text x="502" y="338" font-size="12" fill="#166534">Ya</text>
+            <text x="458" y="338" font-size="12" fill="#991b1b">Tidak</text>
+
+            <line x1="480" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+            <line x1="480" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+            <line x1="480" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+            <line x1="480" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+            <line x1="490" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="3"/>
+            <line x1="220" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="3"/>
+            <line x1="490" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+            <line x1="480" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+            <line x1="480" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+
+            <line x1="480" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+            <line x1="490" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+            <line x1="480" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+            <line x1="490" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+
+            <line x1="480" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+            <line x1="490" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+
+            <line x1="490" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+            <line x1="490" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+
+            <line x1="490" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+            <line x1="490" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+
+            <line x1="490" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+            <line x1="490" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+
+            <line x1="490" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+            <line x1="490" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+
+            <line x1="490" y1="347" x2="220" y2="347" stroke="#64748b" stroke-width="0"/>
+            <line x1="125" y1="384" x2="125" y2="456" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+            <line x1="230" y1="493" x2="290" y2="493" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+            <line x1="510" y1="493" x2="570" y2="493" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+            <line x1="790" y1="493" x2="850" y2="493" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"/>
+          </svg>
+        </div>
+        <p class="caption">Diagram ini merangkum jalur minimum yang harus tervalidasi dalam MVP: pengajuan, verifikasi, persetujuan, pelaporan, presentasi, evaluasi, dan tindak lanjut.</p>
+      </div>
+
+      <h2>11. Mockup Dashboard</h2>
+      <p class="section-lead">Mockup ini menggambarkan tampilan dashboard operasional Bagian Diklat untuk memantau kepatuhan SLA dan status proses harian.</p>
+      <div class="visual-card">
+        <div class="dashboard">
+          <div class="topbar">
+            <div>
+              <div class="brand">Aplikasi REKAM</div>
+              <div class="topmeta">Dashboard Operasional Bagian SDM/Kompetensi</div>
+            </div>
+            <div class="topmeta">RSJ Pemerintah • Periode berjalan</div>
+          </div>
+          <div class="dash-body">
+            <aside class="sidebar">
+              <h4>Navigasi</h4>
+              <div class="nav-item active">Ikhtisar MVP</div>
+              <div class="nav-item">Pengajuan Kompetensi</div>
+              <div class="nav-item">Verifikasi Dokumen</div>
+              <div class="nav-item">Persetujuan Direktur</div>
+              <div class="nav-item">Portal Pasca-Evaluasi</div>
+              <div class="nav-item">Jadwal Presentasi</div>
+              <div class="nav-item">Evaluasi & Arsip</div>
+            </aside>
+            <main class="content">
+              <div class="kpi-grid">
+                <div class="kpi">
+                  <div class="label">Pengajuan Aktif</div>
+                  <div class="value">24</div>
+                </div>
+                <div class="kpi">
+                  <div class="label">Kepatuhan H-25</div>
+                  <div class="value">83%</div>
+                </div>
+                <div class="kpi">
+                  <div class="label">Kelengkapan H+3</div>
+                  <div class="value">76%</div>
+                </div>
+                <div class="kpi">
+                  <div class="label">Presentasi H+6</div>
+                  <div class="value">79%</div>
+                </div>
+              </div>
+              <div class="panel-grid">
+                <section class="panel">
+                  <h4>Status SLA per Tahap</h4>
+                  <div class="bar-list">
+                    <div class="bar-row"><span>Pengajuan H-25</span><div class="bar-track"><div class="bar-fill" style="width:83%"></div></div><strong>83%</strong></div>
+                    <div class="bar-row"><span>Verifikasi</span><div class="bar-track"><div class="bar-fill" style="width:88%"></div></div><strong>88%</strong></div>
+                    <div class="bar-row"><span>Persetujuan</span><div class="bar-track"><div class="bar-fill" style="width:91%"></div></div><strong>91%</strong></div>
+                    <div class="bar-row"><span>Upload H+3</span><div class="bar-track"><div class="bar-fill" style="width:76%"></div></div><strong>76%</strong></div>
+                    <div class="bar-row"><span>Presentasi H+6</span><div class="bar-track"><div class="bar-fill" style="width:79%"></div></div><strong>79%</strong></div>
+                  </div>
+                </section>
+                <section class="panel">
+                  <h4>Daftar Perlu Tindak Cepat</h4>
+                  <table class="mini-table">
+                    <thead>
+                      <tr>
+                        <th>Unit</th>
+                        <th>Tahap</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Rawat Inap</td>
+                        <td>Upload H+3</td>
+                        <td><span class="status late">Terlambat</span></td>
+                      </tr>
+                      <tr>
+                        <td>Keperawatan</td>
+                        <td>Verifikasi</td>
+                        <td><span class="status warn">Perlu revisi</span></td>
+                      </tr>
+                      <tr>
+                        <td>Farmasi</td>
+                        <td>Persetujuan</td>
+                        <td><span class="status ok">Menunggu direktur</span></td>
+                      </tr>
+                      <tr>
+                        <td>Rehabilitasi</td>
+                        <td>Presentasi H+6</td>
+                        <td><span class="status warn">Terjadwal</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </main>
+          </div>
+        </div>
+        <p class="caption">Mockup dashboard berfokus pada empat kebutuhan inti: status pengajuan, kepatuhan SLA, daftar pekerjaan prioritas, dan visibilitas tahapan.</p>
+      </div>
+
+      <h2>12. Wireframe Sistem</h2>
+      <p class="section-lead">Wireframe berikut menunjukkan struktur layar utama yang diperlukan untuk implementasi awal MVP tanpa detail visual akhir.</p>
+      <div class="visual-card">
+        <div class="wireframe-grid">
+          <div class="wf-screen">
+            <div class="wf-header"></div>
+            <div class="wf-label">Wireframe A — Form Pengajuan Kompetensi</div>
+            <div class="wf-row">
+              <div class="wf-box">Field: Unit Kerja</div>
+              <div class="wf-box">Field: Jenis Pelatihan/Kompetensi</div>
+            </div>
+            <div class="wf-row">
+              <div class="wf-box">Field: Tanggal Pelaksanaan</div>
+              <div class="wf-box">Field: Status SLA H-25</div>
+            </div>
+            <div class="wf-box form">Area Form Utama: tujuan evaluasi, peserta, anggaran ringkas, dokumen pendukung, tombol simpan draft, tombol ajukan.</div>
+          </div>
+          <div class="wf-screen">
+            <div class="wf-header"></div>
+            <div class="wf-label">Wireframe B — Persetujuan Direktur</div>
+            <div class="wf-row">
+              <div class="wf-box">Filter status</div>
+              <div class="wf-box">Pencarian unit</div>
+            </div>
+            <div class="wf-box tall">Tabel daftar pengajuan: nomor usulan, unit kerja, tanggal, status verifikasi, prioritas SLA.</div>
+            <div class="wf-row">
+              <div class="wf-box">Ringkasan usulan terpilih</div>
+              <div class="wf-box">Tombol Setujui / Kembalikan</div>
+            </div>
+          </div>
+          <div class="wf-screen">
+            <div class="wf-header"></div>
+            <div class="wf-label">Wireframe C — Portal Pasca-Evaluasi</div>
+            <div class="wf-row">
+              <div class="wf-box">Info peserta</div>
+              <div class="wf-box">Countdown H+3</div>
+            </div>
+            <div class="wf-box form">Area unggah: laporan kegiatan, laporan dana, bukti transaksi, sertifikat, catatan admin, indikator kelengkapan dokumen.</div>
+          </div>
+          <div class="wf-screen">
+            <div class="wf-header"></div>
+            <div class="wf-label">Wireframe D — Jadwal Presentasi & Evaluasi</div>
+            <div class="wf-row">
+              <div class="wf-box">Kalender / daftar jadwal</div>
+              <div class="wf-box">Status H+6</div>
+            </div>
+            <div class="wf-box tall">Panel detail: topik presentasi, peserta, berita acara, hasil evaluasi, rekomendasi tindak lanjut.</div>
+            <div class="wf-row">
+              <div class="wf-box">Tombol Simpan Evaluasi</div>
+              <div class="wf-box">Tombol Buat Rekomendasi</div>
+            </div>
+          </div>
+        </div>
+        <p class="caption">Empat layar ini cukup untuk mewakili perjalanan inti pengguna pada fase MVP: mengajukan, menyetujui, melaporkan, dan mengevaluasi.</p>
+      </div>
+
+      <h2>13. Penutup</h2>
+      <p>Spesifikasi formal ini mendefinisikan MVP Aplikasi REKAM sebagai sistem minimum yang fokus pada proses paling kritis dan paling dapat diukur nilainya. Keberhasilan MVP tidak ditentukan oleh banyaknya fitur, melainkan oleh kemampuannya membuktikan bahwa alur diklat dapat menjadi lebih tertib, lebih cepat, dan lebih terdokumentasi melalui digitalisasi yang terarah.</p>
+    </div>
+  </div>
+</body>
+</html>

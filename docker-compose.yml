@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: diklat_db_dev
+    restart: always
+    environment:
+      POSTGRES_USER: diklat_user
+      POSTGRES_PASSWORD: secretpassword
+      POSTGRES_DB: diklatdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: diklat_backend_dev
+    ports:
+      - "5000:5000"
+    volumes:
+      # Bind mount source code untuk hot-reloading
+      - ./backend:/app
+      # Anonymous volume agar node_modules di dalam container tidak tertimpa node_modules host
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=5000
+      - DATABASE_URL=postgresql://diklat_user:secretpassword@db:5432/diklatdb?schema=public
+      - JWT_SECRET=super_secret_jwt_key_development_only
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: diklat_frontend_dev
+    ports:
+      - "5173:5173"
+    volumes:
+      # Bind mount source code untuk hot module replacement (HMR) Vite
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    # Bergantung pada backend agar backend menyala duluan
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

@@ -1,0 +1,84 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  // Binary targets ini penting agar Prisma Client bisa running di Alpine Linux container
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+enum Role {
+  admin
+  direktur
+  bagian_diklat
+  unit_kerja
+  peserta
+}
+
+enum StatusPegawai {
+  PNS
+  PPPK
+  NonASN
+}
+
+model User {
+  id             String        @id @default(uuid())
+  email          String        @unique
+  password       String
+  namaLengkap    String
+  statusPegawai  StatusPegawai @default(PNS)
+  identitas      String        @unique // NIP atau NRPTT
+  unitKerja      String
+  role           Role          @default(peserta)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  proposals      Proposal[]
+  certificates   Certificate[]
+  auditTrails    AuditTrail[]
+}
+
+model Proposal {
+  id               String        @id @default(uuid())
+  userId           String
+  jenisDiklat      String
+  tanggalPelaksana DateTime
+  catatan          String?
+  status           String        @default("PENDING") // PENDING, REVIEWED, APPROVED, REJECTED, REVISION
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  auditTrails      AuditTrail[]
+  certificate      Certificate?
+}
+
+model Certificate {
+  id                String   @id @default(uuid())
+  userId            String
+  proposalId        String?  @unique
+  judulPelatihan    String
+  noSertifikat      String
+  tanggalSertifikat DateTime
+  skp               Int?
+  jp                Int?
+  fileUrl           String?  // Path file lokal atau URL cloud storage
+  createdAt         DateTime @default(now())
+
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  proposal          Proposal? @relation(fields: [proposalId], references: [id], onDelete: SetNull)
+}
+
+model AuditTrail {
+  id          String   @id @default(uuid())
+  proposalId  String
+  actorId     String
+  action      String   // e.g. "Diajukan", "Disetujui", "Ditolak"
+  note        String?  // Catatan dari approver
+  createdAt   DateTime @default(now())
+
+  proposal    Proposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  actor       User     @relation(fields: [actorId], references: [id])
+}
